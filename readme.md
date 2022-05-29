@@ -6,6 +6,15 @@
 Simple CLI for compiling a Node.js module into a single file,
 together with all its dependencies, gcc-style.
 
+# Disclaimer
+
+This is a fork of [this fork](https://github.com/nokazn/ncc), I had to do this because:
+
+- [nokazn's PR](https://github.com/vercel/ncc/pull/914) hasn't been merged already
+- couldn't use his fork direcly as a dep [because of the way ncc package.json is set up](https://github.com/npm/npm/issues/3055)
+
+While there are (annoying) workarounds, the simplest here is to republish. As a bonus, maybe it'll benefit someone else until nokazn's PR is merged
+
 ## Motivation
 
 - Publish minimal packages to npm
@@ -24,6 +33,7 @@ together with all its dependencies, gcc-style.
 ## Usage
 
 ### Installation
+
 ```bash
 npm i -g @vercel/ncc
 ```
@@ -33,7 +43,9 @@ npm i -g @vercel/ncc
 ```bash
 $ ncc <cmd> <opts>
 ```
+
 Eg:
+
 ```bash
 $ ncc build input.js -o dist
 ```
@@ -47,6 +59,7 @@ Outputs the Node.js compact build of `input.js` into `dist/index.js`.
 > a `"type": "module"` in the package.json file.
 
 #### Commands:
+
 ```
   build <input-file> [opts]
   run <input-file> [opts]
@@ -56,6 +69,7 @@ Outputs the Node.js compact build of `input.js` into `dist/index.js`.
 ```
 
 #### Options:
+
 ```
   -o, --out [dir]          Output directory for build (defaults to dist)
   -m, --minify             Minify output
@@ -109,7 +123,7 @@ See [package-support.md](package-support.md) for some common packages and their 
 ### Programmatically From Node.js
 
 ```js
-require('@vercel/ncc')('/path/to/input', {
+require("@vercel/ncc")("/path/to/input", {
   // provide a custom cache path or disable caching
   cache: "./custom/cache/path" | false,
   // externals to leave as requires of the build
@@ -119,20 +133,20 @@ require('@vercel/ncc')('/path/to/input', {
   minify: false, // default
   sourceMap: false, // default
   assetBuilds: false, // default
-  sourceMapBasePrefix: '../', // default treats sources as output-relative
+  sourceMapBasePrefix: "../", // default treats sources as output-relative
   // when outputting a sourcemap, automatically include
   // source-map-support in the output file (increases output by 32kB).
   sourceMapRegister: true, // default
   watch: false, // default
-  license: '', // default does not generate a license file
+  license: "", // default does not generate a license file
   v8cache: false, // default
   quiet: false, // default
-  debugLog: false // default
+  debugLog: false, // default
 }).then(({ code, map, assets }) => {
   console.log(code);
   // Assets is an object of asset file names to { source, permissions, symlinks }
   // expected relative to the output code (if any)
-})
+});
 ```
 
 When `watch: true` is set, the build object is not a promise, but has the following signature:
